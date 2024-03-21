@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link"
+import GetImages from "@/components/GetImage";
+import GetImagesMaybe from "@/components/ImageRouter";
 //import { Input } from "@/components/ui/input"
 //import { Button } from "@/components/ui/button"
 
@@ -10,7 +12,7 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <nav className="flex items-center justify-between h-14">
             <Link className="flex items-center justify-center" href="#">
-              <span className="sr-only">Acme Inc</span>
+              <span className="sr-only">Stunning</span>
             </Link>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -40,6 +42,15 @@ export default function Home() {
             </form>
           </div>
         </section>
+
+        {/* TODO: Display images here */}
+        <section>
+          <p>Need image to display</p>
+          {/* <GetImages /> */}
+          <GetImagesMaybe />
+          <p>Here</p>
+        </section>
+
         <section className="w-full py-6 md:py-12">
           <div className="container grid items-stretch justify-center gap-4 px-4 md:px-6">
             <div className="grid grid-cols-2 items-stretch justify-center gap-4 md:grid-cols-3">
