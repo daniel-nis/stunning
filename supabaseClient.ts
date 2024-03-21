@@ -11,8 +11,8 @@ async function checkConnection() {
     if (error) {
       console.error('Error connecting to Supabase:', error)
     } else {
-      console.log('Connected to Supabase successfully!')
-      console.log('Data:', data)
+      console.log('Connected to Supabase successfully')
+      //console.log('Data:', data)
     }
   }
   

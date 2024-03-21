@@ -27,7 +27,7 @@ const GetImages: React.FC = () => {
         .from("image_data")
         .select("*");
 
-      console.log(imageData);
+      //console.log(imageData);
 
       if (error) {
         console.error("Error fetching image data:", error);
@@ -41,16 +41,9 @@ const GetImages: React.FC = () => {
           .from("images")
           .getPublicUrl(image.image_path);
         
-        console.log(data);
-        console.log('dis');
+        //console.log(data);
         return { ...image, publicUrl: data.publicUrl };
       });
-
-    //   const imagesWithUrls = imageData.map(image => ({
-    //     ...image,
-    //     // Directly use the publicUrl provided in the database for this example
-    //     publicUrl: image.image_path,
-    //   }));
 
       setImages(imagesWithUrls);
     };
@@ -69,7 +62,7 @@ const GetImages: React.FC = () => {
           style={{ position: "relative", width: "300px", height: "200px" }} // Adjust sizes as needed
         >
           <Image
-            src={image.publicUrl || ""}
+            src={image.image_path || ""}
             alt={`Website ${index}`}
             layout="fill"
             objectFit="cover"
