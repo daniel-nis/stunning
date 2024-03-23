@@ -52,14 +52,14 @@ const GetImages: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "15px" }}>
       {images.map((image, index) => (
         <a
           key={index}
           href={image.website_url}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ position: "relative", width: "300px", height: "200px" }} // Adjust sizes as needed
+          style={{ position: "relative", width: "400px", height: "300px" }} // Adjust sizes as needed
         >
           <Image
             src={image.image_path || ""}

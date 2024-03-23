@@ -9,7 +9,7 @@ export default function Home() {
   return (
     // Header
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 border-gray-200 dark:border-gray-800">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 dark:border-gray-800">
         <div className="container px-4 md:px-6">
           <nav className="flex items-center justify-between h-14">
             <Link className="flex items-center justify-center" href="#">
@@ -21,7 +21,7 @@ export default function Home() {
                   Home
                 </Link>
                 <Link className="flex items-center space-x-2 text-sm font-medium" href="#">
-                  Explore
+                  Submit
                 </Link>
               </div>
             </div>
@@ -46,69 +46,14 @@ export default function Home() {
 
         {/* TODO: Display images here */}
         <section>
-          <GetImages />
+          {/* <GetImages /> */}
           {/* <GetImagesMaybe /> */}
         </section>
 
-        <section className="w-full py-6 md:py-12">
-          <div className="container grid items-stretch justify-center gap-4 px-4 md:px-6">
-            <div className="grid grid-cols-2 items-stretch justify-center gap-4 md:grid-cols-3">
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  src="/placeholder.svg"
-                  width="300"
-                  height="200"
-                  alt="Cover image"
-                  // className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                />
-              </Link>
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  alt="Cover image"
-                  className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="300"
-                />
-              </Link>
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  alt="Cover image"
-                  className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="300"
-                />
-              </Link>
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  alt="Cover image"
-                  className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="300"
-                />
-              </Link>
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  alt="Cover image"
-                  className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="300"
-                />
-              </Link>
-              <Link className="mx-auto flex w-full items-center p-4" href="#">
-                <Image
-                  alt="Cover image"
-                  className="aspect-video overflow-hidden rounded-lg object-cover object-center"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="300"
-                />
-              </Link>
-            </div>
-          </div>
+        <section className="w-full pb-6 md:pb-12">
+              <div className="mx-auto flex p-4">
+                <GetImages />
+              </div>
         </section>
       </main>
     </div>
