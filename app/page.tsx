@@ -44,12 +44,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* TODO: Display images here */}
-        <section>
-          {/* <GetImages /> */}
-          {/* <GetImagesMaybe /> */}
-        </section>
-
         <section className="w-full pb-6 md:pb-12">
               <div className="mx-auto flex p-4">
                 <GetImages />

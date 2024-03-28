@@ -1,32 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/supabaseClient';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    try {
-      // Process your image upload
-      // For example, get the image buffer from the request body (you need to parse it accordingly)
-      const { imageBuffer, fileName } = req.body;
+    // Parse the request body, e.g., using `formidable` or `multiparty` (you will need to install these)
+    // Extract the file data from the request
 
-      // Upload the image to Supabase Storage
-      const { data, error: uploadError } = await supabase.storage
-        .from('images')
-        .upload(fileName, imageBuffer, {
-          contentType: 'image/jpeg', // or the appropriate MIME type
-        });
+    // Then upload to Supabase Storage
+    const { data, error } = await supabase.storage.from('your-bucket-name').upload('path/to/file', fileData);
 
-      if (uploadError) throw new Error('Unable to upload image');
-
-      // Respond with the URL or any other relevant information
-      res.status(200).json({ data });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (error) {
+      return res.status(500).json({ error: error.message });
     }
+
+    // Respond with the URL or confirmation
+    res.status(200).json({ file: data.Key });
   } else {
-    // Handle any other HTTP methods
+    // Handle any other HTTP methods as needed
     res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-};
-
-export default handler;
+}
