@@ -9,11 +9,11 @@ export default function Home() {
   return (
     // Header
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 dark:border-gray-800">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
           <nav className="flex items-center justify-between h-14">
             <Link className="flex items-center justify-center" href="#">
-              <span className="sr-only">Stunning</span>
+              <span className="flex items-center space-x-2 text-sm font-medium">Stunning</span>
             </Link>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
