@@ -1,16 +1,15 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button'; // Adjust the import path as needed
-import { Input } from '@/components/ui/input'; // Adjust the import path as needed
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 15; // 15MB
 const ACCEPTED_FILE_TYPES = ["image/png", "image/jpeg"];
 
-// Define your form schema using Zod
 const formSchema = z.object({
   file: z
     .instanceof(File)
@@ -25,28 +24,24 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function FileUploadForm() {
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
-  // Watch the file input field
-  const file = watch('file');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle file change manually to integrate with react-hook-form
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
+    if (files && files.length > 0) {
       setValue('file', files[0]);
     }
   };
 
-  // Define the form submission handler
   const onSubmit = async (data: FormValues) => {
     const formData = new FormData();
     formData.append("file", data.file);
     formData.append("website_url", data.website_url);
 
-    // Perform fetch operation to your API endpoint
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -68,7 +63,7 @@ export function FileUploadForm() {
         <label htmlFor="file">File</label>
         <input
           type="file"
-          {...register('file')}
+          ref={fileInputRef}
           onChange={onFileChange}
         />
         {errors.file && <p>{errors.file.message}</p>}

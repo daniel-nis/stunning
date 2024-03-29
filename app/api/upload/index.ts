@@ -31,7 +31,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage
     .from('images')
-    .upload(`uploads/${Date.now()}-${originalname}`, buffer, {
+    .upload(`${originalname}`, buffer, {
       contentType: mimetype,
     });
 

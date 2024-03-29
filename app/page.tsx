@@ -16,10 +16,10 @@ export default function Home() {
             </Link>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <Link className="flex items-center space-x-2 text-sm font-medium" href="#">
+                <Link className="flex items-center space-x-2 text-sm font-medium" href="/">
                   Home
                 </Link>
-                <Link className="flex items-center space-x-2 text-sm font-medium" href="#">
+                <Link className="flex items-center space-x-2 text-sm font-medium" href="/submit">
                   Submit
                 </Link>
               </div>
