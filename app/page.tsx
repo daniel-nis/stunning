@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link"
 import GetImages from "@/components/GetImage";
-import GetImagesMaybe from "@/components/ImageRouter";
 //import { Input } from "@/components/ui/input"
 //import { Button } from "@/components/ui/button"
 
@@ -49,6 +48,7 @@ export default function Home() {
                 <GetImages />
               </div>
         </section>
+
       </main>
     </div>
   );

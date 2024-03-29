@@ -14,7 +14,7 @@ type ImageData = {
 // step 1: get url of image from bucket
 // step 2: set url as key in db? retrieve image data from url
 // step 3: map (image, data) in array
-// step 4: export array
+// step 4: export images
 
 const GetImages: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);

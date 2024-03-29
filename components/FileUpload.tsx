@@ -1,64 +1,87 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button'; // Adjust the import path as needed
+import { Input } from '@/components/ui/input'; // Adjust the import path as needed
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 15; // 15MB
+const ACCEPTED_FILE_TYPES = ["image/png", "image/jpeg"];
 
+// Define your form schema using Zod
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  file: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_UPLOAD_SIZE, "File size must be less than 15MB")
+    .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), "File must be a PNG or JPEG"),
+  website_url: z
+    .string()
+    .min(1, "Website URL is required")
+    .url("Invalid URL format"),
 });
 
-export function ProfileForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+type FormValues = z.infer<typeof formSchema>;
+
+export function FileUploadForm() {
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  // Watch the file input field
+  const file = watch('file');
+
+  // Handle file change manually to integrate with react-hook-form
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setValue('file', files[0]);
+    }
+  };
+
+  // Define the form submission handler
+  const onSubmit = async (data: FormValues) => {
+    const formData = new FormData();
+    formData.append("file", data.file);
+    formData.append("website_url", data.website_url);
+
+    // Perform fetch operation to your API endpoint
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("File upload failed");
+      }
+      const result = await response.json();
+      console.log("Upload success:", result);
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <div>
+        <label htmlFor="file">File</label>
+        <input
+          type="file"
+          {...register('file')}
+          onChange={onFileChange}
         />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-  )
+        {errors.file && <p>{errors.file.message}</p>}
+      </div>
+      <div>
+        <label htmlFor="website_url">Website URL</label>
+        <Input
+          {...register('website_url')}
+          placeholder="https://example.com"
+        />
+        {errors.website_url && <p>{errors.website_url.message}</p>}
+      </div>
+      <Button type="submit">Upload File</Button>
+    </form>
+  );
 }
