@@ -36,26 +36,48 @@ const runMiddleware = (req: NextApiRequestWithFile, res: NextApiResponse, fn: an
     });
   });
 
-async function runUpload(req: NextApiRequestWithFile, res: NextApiResponse) {
-  try {
-    // Wrap multer as middleware
-    await runMiddleware(req, res, upload.single('file'));
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded.' });
+  async function runUpload(req: NextApiRequestWithFile, res: NextApiResponse) {
+    try {
+      // Wrap multer as middleware
+      await runMiddleware(req, res, upload.single('file'));
+  
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded.' });
+      }
+  
+      const { buffer, originalname, mimetype } = req.file;
+      // Assuming the website URL is sent as part of the multipart form data along with the file
+      const website_url = req.body.website_url;
+  
+      // Perform the file upload
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(`/${Date.now()}-${originalname}`, buffer, {
+          contentType: mimetype,
+        });
+  
+      if (uploadError) throw uploadError;
+  
+      // Extract the public URL for the uploaded image
+      // Ensure there's no trailing slash in the base path
+      const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
+      // Ensure the uploadData.path has a leading slash removed if present, to avoid double slashes when concatenating
+      const imagePath = `${basePath}/${uploadData.path.replace(/^\//, '')}`;
+      console.log(imagePath)
+  
+      // Insert the new entry into the image_data table
+      const { data: insertData, error: insertError } = await supabase
+        .from('image_data')
+        .insert([
+          { image_path: imagePath, website_url: website_url },
+        ]);
+  
+      if (insertError) throw insertError;
+  
+      // Respond with success message
+      res.status(200).json({ message: 'File uploaded and database entry created successfully', path: imagePath });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Failed to upload file or update database. Please check server logs.' });
     }
-
-    const { buffer, originalname, mimetype } = req.file;
-
-    const { data, error } = await supabase.storage
-      .from('images')
-      .upload(`${Date.now()}-${originalname}`, buffer, { contentType: mimetype });
-
-    if (error) throw error;
-
-    res.status(200).json({ message: 'File uploaded successfully', path: data.path });
-  } catch (error) {
-    console.error('Supabase upload error:', error);
-    res.status(500).json({ error: 'Failed to upload file. Please check server logs.' });
   }
-}
