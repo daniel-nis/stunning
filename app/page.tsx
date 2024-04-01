@@ -8,7 +8,7 @@ export default function Home() {
   return (
     // Header
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+      {/* <header className="sticky top-0 z-10 bg-white border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
           <nav className="flex items-center justify-between h-14">
             <Link className="flex items-center justify-center" href="#">
@@ -26,14 +26,20 @@ export default function Home() {
             </div>
           </nav>
         </div>
-      </header>
+      </header> */}
       <main className="flex-1">
         <section className="w-full py-6 md:py-12">
           <div className="container flex flex-col items-center justify-center gap-2 px-4 text-center md:gap-4 md:px-6">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Stunning Gallery</h1>
+              {/* <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Stunning Gallery</h1> */}
+              <h1 className="inline text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <span className="inline bg-gradient-to-r from-[#ff61b8]  to-[#8800ff] text-transparent bg-clip-text">
+                  Stunning
+                </span>{" "}
+                Gallery
+              </h1>{" "}
               <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                Explore new trends, find inspiration, and organize your projects.
+                Explore new designs, find inspiration, and submit your tastes.
               </p>
             </div>
             <form className="flex w-full max-w-sm flex-col gap-2 min-[400px]:flex-row items-center mx-auto sm:gap-4 lg:gap-6">
