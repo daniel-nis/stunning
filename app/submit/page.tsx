@@ -1,9 +1,13 @@
 "use client"
 
 import { FileUploadForm } from "@/components/FileUpload";
+import { WebsiteUploadForm } from "@/components/WebsiteUpload";
 
 export default function Submit() {
     return (
-        <FileUploadForm />
+        <div>
+            {/* <FileUploadForm /> */}
+            <WebsiteUploadForm />
+        </div>
     )
 }
