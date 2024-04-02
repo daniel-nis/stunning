@@ -10,16 +10,29 @@ import { Input } from '@/components/ui/input';
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 15; // 15MB
 const ACCEPTED_FILE_TYPES = ["image/png", "image/jpeg"];
 
+// const formSchema = z.object({
+//   file: z
+//     .instanceof(File)
+//     .refine((file) => file.size <= MAX_UPLOAD_SIZE, "File size must be less than 15MB")
+//     .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), "File must be a PNG or JPEG"),
+//   website_url: z
+//     .string()
+//     .min(1, "Website URL is required")
+//     .url("Invalid URL format"),
+// });
+
 const formSchema = z.object({
-  file: z
-    .instanceof(File)
-    .refine((file) => file.size <= MAX_UPLOAD_SIZE, "File size must be less than 15MB")
-    .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), "File must be a PNG or JPEG"),
-  website_url: z
-    .string()
-    .min(1, "Website URL is required")
-    .url("Invalid URL format"),
-});
+    file: z.unknown().refine((file) => {
+      if (!(file instanceof File)) {
+        return false;
+      }
+      return file.size <= MAX_UPLOAD_SIZE && ACCEPTED_FILE_TYPES.includes(file.type);
+    }, "Invalid file"),
+    website_url: z
+      .string()
+      .min(1, "Website URL is required")
+      .url("Invalid URL format"),
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -30,16 +43,27 @@ export function FileUploadForm() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      setValue('file', files[0]);
-    }
-  };
+//   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const files = event.target.files;
+//     if (files && files.length > 0) {
+//       setValue('file', files[0]);
+//     }
+//   };
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+        setValue('file', files[0]);
+        }
+    };
 
   const onSubmit = async (data: FormValues) => {
+    // const formData = new FormData();
+    // formData.append("file", data.file);
+    // formData.append("website_url", data.website_url);
     const formData = new FormData();
-    formData.append("file", data.file);
+    if (data.file && data.file instanceof File) {
+        formData.append("file", data.file);
+    }
     formData.append("website_url", data.website_url);
 
     try {
