@@ -84,6 +84,8 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer-core";
+// @ts-ignore
+import chromium from 'chrome-aws-lambda';
 import { supabase } from "@/supabaseClient";
 
 export default async function handler(
@@ -97,10 +99,18 @@ export default async function handler(
   const { website_url } = req.body;
 
   try {
+
+    const chromium = require('chrome-aws-lambda');
+
     // Launch a new browser instance
     const browser = await puppeteer.launch({
-        executablePath: puppeteer.executablePath(),
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        //executablePath: puppeteer.executablePath(),
+        //args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        channel: "chrome",
+        //executablePath: await chromium.executablePath,
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        headless: chromium.headless,
     });
     const page = await browser.newPage();
 
