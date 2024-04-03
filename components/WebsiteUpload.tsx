@@ -34,13 +34,16 @@ export function WebsiteUploadForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate screenshot");
+        //throw new Error("Failed to generate screenshot");
+        const errorData = await response.json();
+        throw new Error(errorData.error);
       }
 
       const { imagePath } = await response.json();
       setScreenshotUrl(imagePath);
     } catch (error) {
       console.error("Error:", error);
+      alert(`Failed to generate screenshot: ${(error as Error).message}`);
     }
   };
 
