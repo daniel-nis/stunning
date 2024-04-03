@@ -105,12 +105,16 @@ export default async function handler(
     // Launch a new browser instance
     const browser = await puppeteer.launch({
         //executablePath: puppeteer.executablePath(),
-        channel: "chrome",
-        executablePath: await puppeteer.executablePath('chrome'),
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        // channel: "chrome",
+        // executablePath: await puppeteer.executablePath('chrome'),
+        // args: ['--no-sandbox', '--disable-setuid-sandbox'],
         //args: chromium.args,
         //defaultViewport: chromium.defaultViewport,
         //headless: chromium.headless,
+        executablePath: await chromium.executablePath,
+        args: chromium.args,
+        //defaultViewport: chromium.defaultViewport,
+        headless: chromium.headless,
     });
     const page = await browser.newPage();
 
