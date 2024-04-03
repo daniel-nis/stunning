@@ -99,7 +99,7 @@ export default async function handler(
   try {
     // Launch a new browser instance
     const browser = await puppeteer.launch({
-        channel: 'chrome',
+        executablePath: puppeteer.executablePath(),
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
