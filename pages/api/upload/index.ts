@@ -83,7 +83,7 @@
 //   }
 
 import { NextApiRequest, NextApiResponse } from "next";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import { supabase } from "@/supabaseClient";
 
 export default async function handler(
@@ -98,19 +98,22 @@ export default async function handler(
 
   try {
     // Launch a new browser instance
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        channel: 'chrome',
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
-    await page.setViewport({ width: 1920, height: 1080 });
+    await page.setViewport({ width: 1280, height: 720 });
 
     // Navigate to the website URL
     await page.goto(website_url, { waitUntil: "networkidle0" });
 
     // Take a screenshot of the full page
-    // const screenshotBuffer = await page.screenshot({
-    //     clip: { x: 0, y: 0, width: 1920, height: 1080 },
-    // });
-    const screenshotBuffer = await page.screenshot({ fullPage: true });
+    const screenshotBuffer = await page.screenshot({
+        clip: { x: 0, y: 0, width: 1280, height: 720 },
+    });
+    //const screenshotBuffer = await page.screenshot({ fullPage: true });
 
     // Close the browser instance
     await browser.close();
