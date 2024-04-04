@@ -1,3 +1,4 @@
+//import { puppeteer } from 'puppeteer';
 // import { NextApiRequest, NextApiResponse } from 'next';
 // import { supabase } from '@/supabaseClient';
 // import multer from 'multer';
@@ -82,16 +83,103 @@
 //     }
 //   }
 
-import { NextApiRequest, NextApiResponse } from "next";
-import puppeteer from "puppeteer-core";
-// @ts-ignore
-import chromium from 'chrome-aws-lambda';
-import { supabase } from "@/supabaseClient";
+// import { NextApiRequest, NextApiResponse } from "next";
+// import { supabase } from "@/supabaseClient";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+// export default async function handler(
+//   req: NextApiRequest,
+//   res: NextApiResponse
+// ) {
+//   if (req.method !== "POST") {
+//     return res.status(405).json({ error: "Method not allowed" });
+//   }
+
+//   const { website_url } = req.body;
+
+
+//   try {
+
+
+//     // Launch a new browser instance
+//     // const browser = await puppeteer.launch({
+//     //     //executablePath: puppeteer.executablePath(),
+//     //     // channel: "chrome",
+//     //     // executablePath: await puppeteer.executablePath('chrome'),
+//     //     // args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//     //     //args: chromium.args,
+//     //     //defaultViewport: chromium.defaultViewport,
+//     //     //headless: chromium.headless,
+//     //     executablePath: await chromium.executablePath,
+//     //     args: chromium.args,
+//     //     //defaultViewport: chromium.defaultViewport,
+//     //     headless: chromium.headless,
+//     // });
+//     const browser = await puppeteer.launch({
+//         args: chromium.args,
+//         defaultViewport: chromium.defaultViewport,
+//         executablePath: await chromium.executablePath(),
+//         headless: chromium.headless,
+//         ignoreHTTPSErrors: true, // Add this line if you encounter HTTPS errors
+//       });
+
+//     const page = await browser.newPage();
+
+//     await page.setViewport({ width: 1280, height: 720 });
+
+//     // Navigate to the website URL
+//     await page.goto(website_url, { waitUntil: "networkidle0" });
+
+//     // Take a screenshot of the full page
+//     const screenshotBuffer = await page.screenshot({
+//         clip: { x: 0, y: 0, width: 1280, height: 720 },
+//     });
+//     //const screenshotBuffer = await page.screenshot({ fullPage: true });
+
+//     // Close the browser instance
+//     await browser.close();
+
+//     // Upload the screenshot to Supabase Storage
+//     const { data: uploadData, error: uploadError } = await supabase.storage
+//       .from("images")
+//       .upload(`${Date.now()}.png`, screenshotBuffer, { contentType: "image/png" });
+
+//     if (uploadError) {
+//       throw uploadError;
+//     }
+
+//     // Extract the public URL for the uploaded screenshot
+//     const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
+//     const imagePath = `${basePath}/${uploadData.path.replace(/^\//, "")}`;
+
+//     console.log(imagePath);
+
+//     // Insert the new entry into the image_data table
+//     const { data: insertData, error: insertError } = await supabase
+//       .from("image_data")
+//       .insert([{ image_path: imagePath, website_url: website_url }]);
+
+//     if (insertError) throw insertError;
+
+//     // Return the screenshot URL as the response
+//     res.status(200).json({ imagePath });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     console.error("Request body:", req.body);
+//     res.status(500).json({ error: `Failed to generate screenshot: ${(error as Error).message}` });
+//   }
+// }
+
+// export const config = {
+//   api: {
+//     bodyParser: true,
+//   },
+// };
+
+import { NextApiRequest, NextApiResponse } from "next";
+import { supabase } from "@/supabaseClient";
+import { takeScreenshot, fetchScreenshot } from "@/utils/screenshotApi";
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -99,38 +187,15 @@ export default async function handler(
   const { website_url } = req.body;
 
   try {
-
-    //const chromium = require('chrome-aws-lambda');
-
-    // Launch a new browser instance
-    const browser = await puppeteer.launch({
-        //executablePath: puppeteer.executablePath(),
-        // channel: "chrome",
-        // executablePath: await puppeteer.executablePath('chrome'),
-        // args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        //args: chromium.args,
-        //defaultViewport: chromium.defaultViewport,
-        //headless: chromium.headless,
-        executablePath: await chromium.executablePath,
-        args: chromium.args,
-        //defaultViewport: chromium.defaultViewport,
-        headless: chromium.headless,
+    // Take a screenshot using the external API
+    const screenshotUrl = await takeScreenshot(website_url, {
+      fullPage: true,
+      format: "png",
+      delay: 5000,
     });
-    const page = await browser.newPage();
 
-    await page.setViewport({ width: 1280, height: 720 });
-
-    // Navigate to the website URL
-    await page.goto(website_url, { waitUntil: "networkidle0" });
-
-    // Take a screenshot of the full page
-    const screenshotBuffer = await page.screenshot({
-        clip: { x: 0, y: 0, width: 1280, height: 720 },
-    });
-    //const screenshotBuffer = await page.screenshot({ fullPage: true });
-
-    // Close the browser instance
-    await browser.close();
+    // Fetch the screenshot data
+    const screenshotBuffer = await fetchScreenshot(screenshotUrl);
 
     // Upload the screenshot to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
