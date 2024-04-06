@@ -1,6 +1,6 @@
 {
   "functions": {
-    "pages/api/upload/index.ts": {
+    "api/upload/index.ts": {
       "maxDuration": 60
     }
   }
