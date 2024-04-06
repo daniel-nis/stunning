@@ -1,4 +1,3 @@
-//import { puppeteer } from 'puppeteer';
 // import { NextApiRequest, NextApiResponse } from 'next';
 // import { supabase } from '@/supabaseClient';
 // import multer from 'multer';
@@ -176,10 +175,21 @@
 // };
 
 import { NextApiRequest, NextApiResponse } from "next";
+import NextCors from 'nextjs-cors';
+
 import { supabase } from "@/supabaseClient";
 import { takeScreenshot, fetchScreenshot } from "@/utils/screenshotApi";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Run the cors middleware
+  await NextCors(req, res, {
+    // Options
+    methods: ['GET', 'POST', 'OPTIONS'],
+    origin: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    // Additional options...
+  });
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
