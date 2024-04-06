@@ -201,7 +201,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const screenshotUrl = await takeScreenshot(website_url, {
       fullPage: true,
       format: "png",
-      delay: 5000,
+      delay: 2000,
     });
 
     // Fetch the screenshot data
