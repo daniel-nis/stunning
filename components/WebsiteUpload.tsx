@@ -35,8 +35,10 @@ export function WebsiteUploadForm() {
 
       if (!response.ok) {
         //throw new Error("Failed to generate screenshot");
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        //const errorData = await response.json();
+        //throw new Error(errorData.error);
+        const errorText = await response.text();
+        throw new Error(errorText);
       }
 
       const { imagePath } = await response.json();

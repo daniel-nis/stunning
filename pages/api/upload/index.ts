@@ -234,7 +234,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error) {
     console.error("Error:", error);
     console.error("Request body:", req.body);
-    res.status(500).json({ error: `Failed to generate screenshot: ${(error as Error).message}` });
+    //res.status(500).json({ error: `Failed to generate screenshot: ${(error as Error).message}` });
+    res.status(500).json({ error: (error as Error).toString() });
   }
 }
 
