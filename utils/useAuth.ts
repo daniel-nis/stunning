@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/supabaseClient';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { Session, User, AuthSession, AuthResponse } from '@supabase/supabase-js';
 
 export type AuthUser = {
@@ -12,7 +12,7 @@ export type AuthUser = {
 export const useAuth = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+//   const router = useRouter();
 
   useEffect(() => {
     const getUserData = async () => {
@@ -90,7 +90,7 @@ export const useAuth = () => {
     return { user: data.user, error };
   };
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -98,8 +98,7 @@ export const useAuth = () => {
     }
 
     setUser(null);
-    router.push('/');
-  };
+  }, []);
 
 //   const signInWithProvider = async (provider: 'google' | 'github') => {
 //     const { data, error }: AuthResponse = await supabase.auth.signInWithOAuth({

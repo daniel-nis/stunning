@@ -1,25 +1,40 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/ui/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+import { useAuth } from "@/utils/useAuth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const { signUp, signIn, signOut } = useAuth();
 
   async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
+
+    const email = (event.target as HTMLFormElement).email.value;
+    const password = (event.target as HTMLFormElement).password.value;
+
+    const { error } = await signIn(email, password);
+
+    if (error) {
+      console.error("Error signing in:", error);
+    }
+
+    setIsLoading(false);
 
     setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+      setIsLoading(false);
+    }, 3000);
   }
 
   return (
@@ -36,6 +51,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               type="email"
               autoCapitalize="none"
               autoComplete="email"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="Password"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="current-password"
               autoCorrect="off"
               disabled={isLoading}
             />
@@ -67,5 +96,5 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         GitHub
       </Button> */}
     </div>
-  )
+  );
 }
