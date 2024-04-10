@@ -97,14 +97,12 @@ export const Navbar = () => {
                     </a>
                   ))}
                   <a
-                    href="https://github.com/"
-                    target="_blank"
+                    href="/login"
+                    target="Login"
                     className={`w-[110px] border ${buttonVariants({
                       variant: "secondary",
                     })}`}
                   >
-                    {/* TODO */}
-                    {/* <GitHubLogoIcon className="mr-2 w-5 h-5" /> */}
                     Login
                   </a>
                 </nav>
@@ -129,8 +127,8 @@ export const Navbar = () => {
 
           <div className="hidden md:flex gap-2">
             <a
-              href="https://github.com/"
-              target="_blank"
+              href="/login"
+              target="Login"
               className={`border ${buttonVariants({ variant: "secondary" })}`}
             >
                 {/* TODO */}

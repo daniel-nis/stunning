@@ -33,7 +33,7 @@ export default function Home() {
             <div className="space-y-2">
               {/* <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Stunning Gallery</h1> */}
               <h1 className="inline text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                <span className="inline bg-gradient-to-r from-[#ff61b8]  to-[#8800ff] text-transparent bg-clip-text">
+                <span className="inline bg-gradient-to-r from-[#ff5757]  to-[#8800ff] text-transparent bg-clip-text">
                   Stunning
                 </span>{" "}
                 Gallery

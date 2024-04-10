@@ -1,86 +1,86 @@
-// import { NextApiRequest, NextApiResponse } from 'next';
-// import { supabase } from '@/supabaseClient';
-// import multer from 'multer';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { supabase } from '@/supabaseClient';
+import multer from 'multer';
 
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
-// interface NextApiRequestWithFile extends NextApiRequest {
-//   file: Express.Multer.File;
-// }
+interface NextApiRequestWithFile extends NextApiRequest {
+  file: Express.Multer.File;
+}
 
-// export default async function handler(
-//   req: NextApiRequestWithFile,
-//   res: NextApiResponse
-// ) {
-//   if (req.method === 'POST') {
-//     await runUpload(req, res);
-//   } else {
-//     res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-//   }
-// }
+export default async function handler(
+  req: NextApiRequestWithFile,
+  res: NextApiResponse
+) {
+  if (req.method === 'POST') {
+    await runUpload(req, res);
+  } else {
+    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
+  }
+}
 
-// const runMiddleware = (req: NextApiRequestWithFile, res: NextApiResponse, fn: any) => 
-//   new Promise((resolve, reject) => {
-//     fn(req, res, (result: any) => {
-//       if (result instanceof Error) {
-//         return reject(result);
-//       }
-//       return resolve(result);
-//     });
-//   });
+const runMiddleware = (req: NextApiRequestWithFile, res: NextApiResponse, fn: any) => 
+  new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
 
-//   async function runUpload(req: NextApiRequestWithFile, res: NextApiResponse) {
-//     try {
-//       // Wrap multer as middleware
-//       await runMiddleware(req, res, upload.single('file'));
+  async function runUpload(req: NextApiRequestWithFile, res: NextApiResponse) {
+    try {
+      // Wrap multer as middleware
+      await runMiddleware(req, res, upload.single('file'));
   
-//       if (!req.file) {
-//         return res.status(400).json({ error: 'No file uploaded.' });
-//       }
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded.' });
+      }
   
-//       const { buffer, originalname, mimetype } = req.file;
-//       // Assuming the website URL is sent as part of the multipart form data along with the file
-//       const website_url = req.body.website_url;
+      const { buffer, originalname, mimetype } = req.file;
+      // Assuming the website URL is sent as part of the multipart form data along with the file
+      const website_url = req.body.website_url;
   
-//       // Perform the file upload
-//       const { data: uploadData, error: uploadError } = await supabase.storage
-//         .from('images')
-//         .upload(`/${Date.now()}-${originalname}`, buffer, {
-//           contentType: mimetype,
-//         });
+      // Perform the file upload
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(`/${Date.now()}-${originalname}`, buffer, {
+          contentType: mimetype,
+        });
   
-//       if (uploadError) throw uploadError;
+      if (uploadError) throw uploadError;
   
-//       // Extract the public URL for the uploaded image
-//       // Ensure there's no trailing slash in the base path
-//       const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
-//       // Ensure the uploadData.path has a leading slash removed if present, to avoid double slashes when concatenating
-//       const imagePath = `${basePath}/${uploadData.path.replace(/^\//, '')}`;
-//       console.log(imagePath)
+      // Extract the public URL for the uploaded image
+      // Ensure there's no trailing slash in the base path
+      const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
+      // Ensure the uploadData.path has a leading slash removed if present, to avoid double slashes when concatenating
+      const imagePath = `${basePath}/${uploadData.path.replace(/^\//, '')}`;
+      console.log(imagePath)
   
-//       // Insert the new entry into the image_data table
-//       const { data: insertData, error: insertError } = await supabase
-//         .from('image_data')
-//         .insert([
-//           { image_path: imagePath, website_url: website_url },
-//         ]);
+      // Insert the new entry into the image_data table
+      const { data: insertData, error: insertError } = await supabase
+        .from('image_data')
+        .insert([
+          { image_path: imagePath, website_url: website_url },
+        ]);
   
-//       if (insertError) throw insertError;
+      if (insertError) throw insertError;
   
-//       // Respond with success message
-//       res.status(200).json({ message: 'File uploaded and database entry created successfully', path: imagePath });
-//     } catch (error) {
-//       console.error('Error:', error);
-//       res.status(500).json({ error: 'Failed to upload file or update database. Please check server logs.' });
-//     }
-//   }
+      // Respond with success message
+      res.status(200).json({ message: 'File uploaded and database entry created successfully', path: imagePath });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Failed to upload file or update database. Please check server logs.' });
+    }
+  }
 
 // import { NextApiRequest, NextApiResponse } from "next";
 // import { supabase } from "@/supabaseClient";
@@ -174,73 +174,73 @@
 //   },
 // };
 
-import { NextApiRequest, NextApiResponse } from "next";
-import NextCors from 'nextjs-cors';
+// import { NextApiRequest, NextApiResponse } from "next";
+// import NextCors from 'nextjs-cors';
 
-import { supabase } from "@/supabaseClient";
-import { takeScreenshot, fetchScreenshot } from "@/utils/screenshotApi";
+// import { supabase } from "@/supabaseClient";
+// import { takeScreenshot, fetchScreenshot } from "@/utils/screenshotApi";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Run the cors middleware
-  await NextCors(req, res, {
-    // Options
-    methods: ['GET', 'POST', 'OPTIONS'],
-    origin: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    // Additional options...
-  });
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+//   // Run the cors middleware
+//   await NextCors(req, res, {
+//     // Options
+//     methods: ['GET', 'POST', 'OPTIONS'],
+//     origin: '*',
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     // Additional options...
+//   });
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+//   if (req.method !== "POST") {
+//     return res.status(405).json({ error: "Method not allowed" });
+//   }
 
-  const { website_url } = req.body;
+//   const { website_url } = req.body;
 
-  try {
-    // Take a screenshot using the external API
-    const screenshotUrl = await takeScreenshot(website_url, {
-      fullPage: true,
-      format: "png",
-      delay: 2000,
-    });
+//   try {
+//     // Take a screenshot using the external API
+//     const screenshotUrl = await takeScreenshot(website_url, {
+//       fullPage: true,
+//       format: "png",
+//       delay: 2000,
+//     });
 
-    // Fetch the screenshot data
-    const screenshotBuffer = await fetchScreenshot(screenshotUrl);
+//     // Fetch the screenshot data
+//     const screenshotBuffer = await fetchScreenshot(screenshotUrl);
 
-    // Upload the screenshot to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("images")
-      .upload(`${Date.now()}.png`, screenshotBuffer, { contentType: "image/png" });
+//     // Upload the screenshot to Supabase Storage
+//     const { data: uploadData, error: uploadError } = await supabase.storage
+//       .from("images")
+//       .upload(`${Date.now()}.png`, screenshotBuffer, { contentType: "image/png" });
 
-    if (uploadError) {
-      throw uploadError;
-    }
+//     if (uploadError) {
+//       throw uploadError;
+//     }
 
-    // Extract the public URL for the uploaded screenshot
-    const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
-    const imagePath = `${basePath}/${uploadData.path.replace(/^\//, "")}`;
+//     // Extract the public URL for the uploaded screenshot
+//     const basePath = "https://qliwrxwpocxqxoayomeb.supabase.co/storage/v1/object/public/images";
+//     const imagePath = `${basePath}/${uploadData.path.replace(/^\//, "")}`;
 
-    console.log(imagePath);
+//     console.log(imagePath);
 
-    // Insert the new entry into the image_data table
-    const { data: insertData, error: insertError } = await supabase
-      .from("image_data")
-      .insert([{ image_path: imagePath, website_url: website_url }]);
+//     // Insert the new entry into the image_data table
+//     const { data: insertData, error: insertError } = await supabase
+//       .from("image_data")
+//       .insert([{ image_path: imagePath, website_url: website_url }]);
 
-    if (insertError) throw insertError;
+//     if (insertError) throw insertError;
 
-    // Return the screenshot URL as the response
-    res.status(200).json({ imagePath });
-  } catch (error) {
-    console.error("Error:", error);
-    console.error("Request body:", req.body);
-    //res.status(500).json({ error: `Failed to generate screenshot: ${(error as Error).message}` });
-    res.status(500).json({ error: (error as Error).toString() });
-  }
-}
+//     // Return the screenshot URL as the response
+//     res.status(200).json({ imagePath });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     console.error("Request body:", req.body);
+//     //res.status(500).json({ error: `Failed to generate screenshot: ${(error as Error).message}` });
+//     res.status(500).json({ error: (error as Error).toString() });
+//   }
+// }
 
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: true,
+//   },
+// };

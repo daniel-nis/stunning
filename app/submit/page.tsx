@@ -7,8 +7,8 @@ export default function Submit() {
     return (
         <div>
             <p>Help curate this list by submitting a website that you think is stunning!</p>
-            {/* <FileUploadForm /> */}
-            <WebsiteUploadForm />
+            <FileUploadForm />
+            {/* <WebsiteUploadForm /> */}
         </div>
     )
 }
