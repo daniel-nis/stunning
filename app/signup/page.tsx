@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { UserAuthForm } from "@/components/AuthForm"
+import { UserSignUpForm } from "@/components/SignUpForm";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -13,13 +13,13 @@ export default function AuthenticationPage() {
         <div className="mx-auto w-full max-w-md px-4">
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Login to Stunning Gallery
+              Create an account
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email and password to submit your tastes
+              Enter your email below to create your account
             </p>
           </div>
-          <UserAuthForm />
+          <UserSignUpForm />
           <p className="mt-4 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link
