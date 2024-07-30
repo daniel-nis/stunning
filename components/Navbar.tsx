@@ -30,10 +30,10 @@ const routeList: RouteProps[] = [
     href: "/",
     label: "Home",
   },
-  {
-    href: "/submit",
-    label: "Submit",
-  },
+  // {
+  //   href: "/submit",
+  //   label: "Submit",
+  // },
 //   {
 //     href: "#TBD",
 //     label: "TBD",
@@ -97,13 +97,13 @@ export const Navbar = () => {
                     </a>
                   ))}
                   <a
-                    href="/login"
-                    target="Login"
+                    href="https://forms.gle/U8GiukNz3KaiFXDs7"
+                    target="Submit"
                     className={`w-[110px] border ${buttonVariants({
                       variant: "secondary",
                     })}`}
                   >
-                    Login
+                    Submit
                   </a>
                 </nav>
               </SheetContent>
@@ -120,20 +120,20 @@ export const Navbar = () => {
                   variant: "ghost",
                 })}`}
               >
-                {route.label}
+                🧑‍🎨
               </a>
             ))}
           </nav>
 
           <div className="hidden md:flex gap-2">
             <a
-              href="/login"
-              target="Login"
+              href="https://forms.gle/U8GiukNz3KaiFXDs7"
+              target="Submit"
               className={`border ${buttonVariants({ variant: "secondary" })}`}
             >
                 {/* TODO */}
               {/* <GitHubLogoIcon className="mr-2 w-5 h-5" /> */}
-              Login
+              Submit
             </a>
 
                 {/* TODO */}
