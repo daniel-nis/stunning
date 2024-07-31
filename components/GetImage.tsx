@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/supabaseClient";
 import Image from "next/image";
+import { Skeleton } from "./ui/skeleton";
 
 type ImageData = {
   id: number;
@@ -18,11 +19,13 @@ type ImageData = {
 
 const GetImages: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);
+  const [loading, setLoading] = useState(true);
   
   //console.log('hi');
 
   useEffect(() => {
     const fetchImages = async () => {
+      setLoading(true);
       const { data: imageData, error } = await supabase
         .from("image_data")
         .select("*");
@@ -31,6 +34,7 @@ const GetImages: React.FC = () => {
 
       if (error) {
         console.error("Error fetching image data:", error);
+        setLoading(false);
         return;
       }
 
@@ -46,10 +50,26 @@ const GetImages: React.FC = () => {
       });
 
       setImages(imagesWithUrls);
+      setLoading(false);
     };
 
     fetchImages();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-wrap justify-center gap-6">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <div
+            key={index}
+            style={{ position: "relative", width: "400px", height: "300px" }}
+          >
+            <Skeleton className="w-full h-full rounded-lg" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "15px" }}>
