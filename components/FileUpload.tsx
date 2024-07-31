@@ -56,30 +56,30 @@ export function FileUploadForm() {
         }
     };
 
-  const onSubmit = async (data: FormValues) => {
-    // const formData = new FormData();
-    // formData.append("file", data.file);
-    // formData.append("website_url", data.website_url);
-    const formData = new FormData();
-    if (data.file && data.file instanceof File) {
+    const onSubmit = async (data: FormValues) => {
+      const formData = new FormData();
+      if (data.file instanceof File) {
         formData.append("file", data.file);
-    }
-    formData.append("website_url", data.website_url);
-
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error("File upload failed");
+      } else {
+        console.error("Invalid file");
+        return;
       }
-      const result = await response.json();
-      console.log("Upload success:", result);
-    } catch (error) {
-      console.error("Upload error:", error);
-    }
-  };
+      formData.append("website_url", data.website_url);
+    
+      try {
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) {
+          throw new Error("File upload failed");
+        }
+        const result = await response.json();
+        console.log("Upload success:", result);
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">

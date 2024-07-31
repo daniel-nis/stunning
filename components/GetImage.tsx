@@ -66,6 +66,7 @@ const GetImages: React.FC = () => {
             alt={`Website ${index}`}
             layout="fill"
             objectFit="cover"
+            className="rounded-lg hover:ring-2 hover:ring-violet-500 hover:ring-offset-2 shadow-2xl shadow-violet-200 hover:drop-shadow-xl"
           />
         </a>
       ))}

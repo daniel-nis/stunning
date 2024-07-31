@@ -36,6 +36,10 @@ const runMiddleware = (req: NextApiRequestWithFile, res: NextApiResponse, fn: an
     });
   });
 
+  const sanitizeFilename = (filename: string) => {
+    return filename.replace(/[^a-zA-Z0-9.-]/g, '_');
+  };
+
   async function runUpload(req: NextApiRequestWithFile, res: NextApiResponse) {
     try {
       // Wrap multer as middleware
@@ -48,11 +52,14 @@ const runMiddleware = (req: NextApiRequestWithFile, res: NextApiResponse, fn: an
       const { buffer, originalname, mimetype } = req.file;
       // Assuming the website URL is sent as part of the multipart form data along with the file
       const website_url = req.body.website_url;
+
+      const sanitizedFilename = sanitizeFilename(originalname);
+      const uniqueFilename = `${Date.now()}-${sanitizedFilename}`;
   
       // Perform the file upload
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('images')
-        .upload(`/${Date.now()}-${originalname}`, buffer, {
+        .upload(uniqueFilename, buffer, {
           contentType: mimetype,
         });
   
