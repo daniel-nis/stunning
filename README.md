@@ -1,6 +1,4 @@
 # Stunning
-
-## Description
 Stunning Gallery is a curated gallery showcasing some of the most visually appealing websites, inspiring designers and developers alike. This is a full-stack project focusing on modern web technologies and design aesthetics.
 
 ## Key Features
