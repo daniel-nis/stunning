@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'GET') {
+  if (req.method === 'HEAD' || req.method === 'GET') {
     try {
       // Perform a simple query to keep the database active
       const { data, error } = await supabase
@@ -15,12 +15,26 @@ export default async function handler(
 
       if (error) throw error;
 
-      res.status(200).json({ status: 'OK', message: 'Supabase is active' });
+      if (req.method === 'HEAD') {
+        // For HEAD requests, we only send headers
+        res.status(200).end();
+      } else {
+        // For GET requests, we send a JSON response
+        res.status(200).json({ status: 'OK', message: 'Supabase is active' });
+      }
     } catch (error) {
       console.error('Error:', error);
-      res.status(500).json({ error: 'Failed to ping Supabase' });
+      if (req.method === 'HEAD') {
+        res.status(500).end();
+      } else {
+        res.status(500).json({ error: 'Failed to ping Supabase' });
+      }
     }
   } else {
-    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
+    if (req.method === 'HEAD') {
+      res.status(405).end();
+    } else {
+      res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
+    }
   }
 }
